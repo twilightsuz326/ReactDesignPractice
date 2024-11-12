@@ -1,29 +1,40 @@
+// pages/Login.jsx
 import React, { useState } from 'react';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { Page, Input, Button } from 'react-onsenui';
+import Appbar from '../components/Appbar';
 
-function LoginPage({setUser}) {
+const Login = ({ navigator }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const navigate = useNavigate();
 
     const handleLogin = () => {
-        axios.post('/api/login', { email, password }, { withCredentials: true })
-            .then(response => {
-                setUser(response.data.user);
-                navigate('/dashboard');
-            })
-            .catch(error => alert('Login failed'));
-    }
+        // 認証処理
+    };
 
     return (
-        <div>
-            <h2>Login</h2>
-            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" />
-            <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" />
-            <button onClick={handleLogin}>Login</button>
-        </div>
+        <Page renderToolbar={() => <Appbar title="ログイン" navigator={navigator} />}>
+            <div style={{ padding: 20 }}>
+                <Input
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    modifier="underbar"
+                    float
+                    placeholder="Email"
+                    style={{ marginBottom: 20 }}
+                />
+                <Input
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    modifier="underbar"
+                    type="password"
+                    float
+                    placeholder="Password"
+                    style={{ marginBottom: 20 }}
+                />
+                <Button onClick={handleLogin}>ログイン</Button>
+            </div>
+        </Page>
     );
-}
+};
 
-export default LoginPage;
+export default Login;

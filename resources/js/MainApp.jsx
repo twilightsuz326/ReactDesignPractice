@@ -1,53 +1,46 @@
 // App.jsx
-import { Routes, Route, useLocation } from 'react-router-dom';
-import { useState, useEffect } from 'react';
-import Appbar from './components/Appbar';
-import BottomNavigation from './components/BottomNavigation';
-import Home from './pages/Home';
-import Profile from './pages/Profile';
+import React from 'react';
+import { Navigator, Page, Tabbar, Tab } from 'react-onsenui';
+import CarList from './pages/CarList';
+import StoreList from './pages/StoreList';
 import Settings from './pages/Settings';
-import Login from './pages/Login';
-import AccountSettings from './pages/AccountSettings';
-import NotificationSettings from './pages/NotificationSettings';
-import PrivacySettings from './pages/PrivacySettings';
 
 function App() {
-    const location = useLocation();
-    const [title, setTitle] = useState('MyApp');
-    const [showBackButton, setShowBackButton] = useState(false);
+    const renderPage = (route, navigator) => {
+        const props = route.props || {};
+        props.navigator = navigator;
 
-    useEffect(() => {
-        const titles = {
-            '/': 'Home',
-            '/profile': 'Profile',
-            '/settings': 'Settings',
-            '/login': 'Login',
-            '/settings/account': 'アカウント設定',
-            '/settings/notifications': '通知設定',
-            '/settings/privacy': 'プライバシー設定',
-        };
-
-        setTitle(titles[location.pathname] || 'MyApp');
-        setShowBackButton(location.pathname.startsWith('/settings') && location.pathname !== '/settings');
-    }, [location]);
+        return React.createElement(route.component, { key: route.key, ...props });
+    };
 
     return (
-        <>
-            <Appbar title={title} showBackButton={showBackButton} />
-            <div style={{ paddingTop: 56, paddingBottom: 50 }}> {/* AppbarとBottomNavigationのための余白 */}
-                <Routes>
-                    <Route path="/" element={<Home />} />
-                    <Route path="/profile" element={<Profile />} />
-                    <Route path="/settings" element={<Settings />} />
-                    <Route path="/login" element={<Login />} />
-                    <Route path="/settings/account" element={<AccountSettings />} />
-                    <Route path="/settings/notifications" element={<NotificationSettings />} />
-                    <Route path="/settings/privacy" element={<PrivacySettings />} />
-                </Routes>
-            </div>
-            <BottomNavigation />
-        </>
+        <Navigator
+            initialRoute={{ component: MainTabs, key: 'main' }}
+            renderPage={renderPage}
+        />
     );
 }
+
+const MainTabs = ({ navigator }) => (
+    <Page>
+        <Tabbar
+            position="bottom"
+            renderTabs={() => [
+                {
+                    content: <Page key="carList"><CarList /></Page>,
+                    tab: <Tab key="carList" label="Cars" icon="md-car" />
+                },
+                {
+                    content: <Page key="storeList"><StoreList /></Page>,
+                    tab: <Tab key="storeList" label="Stores" icon="md-store" />
+                },
+                {
+                    content: <Page key="settings"><Settings navigator={navigator} /></Page>,
+                    tab: <Tab key="settings" label="Settings" icon="md-settings" />
+                }
+            ]}
+        />
+    </Page>
+);
 
 export default App;

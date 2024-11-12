@@ -1,9 +1,10 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-import { BrowserRouter as Router } from 'react-router-dom';
+import 'onsenui/css/onsenui.css';
+import 'onsenui/css/onsen-css-components.css';
 import App from './MainApp';
 
 const container = document.getElementById("app");
 const root = createRoot(container);
 
-root.render(<Router><App /></Router>);
+root.render(<React.StrictMode><App /></React.StrictMode>,);
