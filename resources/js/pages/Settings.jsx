@@ -1,13 +1,12 @@
 // pages/Settings.jsx
 import React from 'react';
-import { Page, List, ListItem, Switch } from 'react-onsenui';
+import { Page, List, ListItem, Switch, Navigator } from 'react-onsenui';
 import NotificationSettings from './NotificationSettings';
 import PrivacySettings from './PrivacySettings';
 import AccountSettings from './AccountSettings';
 import Appbar from '../components/Appbar';
 
-
-const Settings = ({ navigator }) => {
+const Settings = () => {
     const settingsOptions = [
         { name: 'Push Notifications', isEnabled: true },
         { name: 'Location Access', isEnabled: false },
@@ -20,11 +19,19 @@ const Settings = ({ navigator }) => {
         { name: 'プライバシー設定', component: PrivacySettings },
     ];
 
-    const openSubPage = (component, title) => {
-        navigator.pushPage({ component, props: { title } });
+    const renderSettingsPage = (route, navigator) => {
+        const { component: Component, title, key } = route;
+
+        return (
+            <Component
+                key={key}
+                navigator={navigator}
+                title={title}
+            />
+        );
     };
 
-    return (
+    const SettingsList = ({ navigator }) => (
         <Page renderToolbar={() => <Appbar title="Settings" navigator={navigator} />}>
             <h2 style={{ padding: '16px' }}>Settings</h2>
 
@@ -50,7 +57,13 @@ const Settings = ({ navigator }) => {
                     <ListItem
                         key={option.name}
                         tappable
-                        onClick={() => openSubPage(option.component, option.name)}
+                        onClick={() =>
+                            navigator.pushPage({
+                                component: option.component,
+                                title: option.name,
+                                key: `sub-${option.name}`,
+                            })
+                        }
                     >
                         <div className="center">
                             <span>{option.name}</span>
@@ -59,6 +72,13 @@ const Settings = ({ navigator }) => {
                 )}
             />
         </Page>
+    );
+
+    return (
+        <Navigator
+            initialRoute={{ component: SettingsList , key: 'settings-list' }}
+            renderPage={renderSettingsPage}
+        />
     );
 };
 
