@@ -30,6 +30,7 @@ const MainTabs = () => {
         <Page>
             <Tabbar
                 onPreChange={handleTabChange}
+                animation='none'
                 position="bottom"
                 index={index}
                 renderTabs={() => [
