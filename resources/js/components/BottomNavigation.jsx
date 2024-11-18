@@ -15,21 +15,30 @@ export default function BottomNavigation() {
         <div style={{
             display: 'flex',
             justifyContent: 'space-around',
-            padding: 10,
-            backgroundColor: '#f8f8f8',
+            alignItems: 'center',
+            height: 70, // 高さを少し増やす
+            paddingBottom: 'env(safe-area-inset-bottom)', // iOSのセーフエリア対応
+            backgroundColor: '#fff',
             borderTop: '1px solid #ddd',
             position: 'fixed',
             bottom: 0,
-            width: '100%'
+            width: '100%',
+            boxShadow: '0 -2px 5px rgba(0,0,0,0.1)',
+            zIndex: 1000, // 他の要素の上に配置
         }}>
             {links.map(link => (
                 <Link key={link.to} to={link.to} style={{
+                    flex: 1,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    alignItems: 'center',
                     color: location.pathname === link.to ? '#007bff' : '#555',
-                    textAlign: 'center',
                     textDecoration: 'none',
-                    fontSize: 12
+                    fontSize: 12,
+                    transition: 'background-color 0.2s ease'
                 }}>
-                    <div>{link.icon}</div>
+                    <div style={{ fontSize: 20 }}>{link.icon}</div>
                     <span>{link.label}</span>
                 </Link>
             ))}
