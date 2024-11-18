@@ -1,13 +1,18 @@
 // pages/Login.jsx
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-export default function Login() {
+export default function Login({ setUser }) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const navigate = useNavigate();
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        setUser(true);
+        alert('ログインしました');
         // 認証処理を追加
+        navigate('/');
     };
 
     return (

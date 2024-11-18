@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Appbar from './components/Appbar';
 import BottomNavigation from './components/BottomNavigation';
 import Home from './pages/Home';
+import AuthNavBar from './components/AuthNavBar';
 import Profile from './pages/Profile';
 import Settings from './pages/Settings';
 import Login from './pages/Login';
@@ -15,6 +16,7 @@ function App() {
     const location = useLocation();
     const [title, setTitle] = useState('MyApp');
     const [showBackButton, setShowBackButton] = useState(false);
+    const [user, setUser] = useState(null);
 
     useEffect(() => {
         const titles = {
@@ -36,13 +38,15 @@ function App() {
             <Appbar title={title} showBackButton={showBackButton} />
             <div style={{ paddingTop: 56, paddingBottom: 50 }}> {/* AppbarとBottomNavigationのための余白 */}
                 <Routes>
-                    <Route path="/" element={<Home />} />
-                    <Route path="/profile" element={<Profile />} />
-                    <Route path="/settings" element={<Settings />} />
-                    <Route path="/login" element={<Login />} />
+                    <Route path="/login" element={<Login setUser={setUser} />} />
                     <Route path="/settings/account" element={<AccountSettings />} />
                     <Route path="/settings/notifications" element={<NotificationSettings />} />
                     <Route path="/settings/privacy" element={<PrivacySettings />} />
+                    <Route element={<AuthNavBar user={user} />}>
+                        <Route path="/" element={<Home />} />
+                        <Route path="/profile" element={<Profile />} />
+                        <Route path="/settings" element={<Settings />} />
+                    </Route>
                 </Routes>
             </div>
             <BottomNavigation />
